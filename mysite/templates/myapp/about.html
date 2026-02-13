@@ -1,0 +1,133 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}About - CyberPhishGuard+{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="section-title">About CyberPhishGuard+</h1>
+                <p class="lead">Empowering cybersecurity through advanced threat intelligence and proactive protection.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-mission py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2>Our Mission</h2>
+                <p>CyberPhishGuard+ is a comprehensive cybersecurity threat intelligence platform designed to protect digital assets through real-time monitoring, advanced scanning, and proactive threat detection. Our mission is to empower individuals and organizations with cutting-edge tools to combat cyber threats effectively.</p>
+                <p>We are committed to staying ahead of emerging threats and providing reliable, user-friendly solutions for cybersecurity challenges.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="mission-visual">
+                    <i class="fas fa-shield-alt fa-5x text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-features py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Core Features</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-search fa-3x text-primary"></i>
+                    </div>
+                    <h4>File Scanning</h4>
+                    <p>Advanced malware detection with confidence scoring and detailed analysis reports.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-link fa-3x text-primary"></i>
+                    </div>
+                    <h4>URL Scanning</h4>
+                    <p>Comprehensive phishing URL detection and analysis for email security.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-envelope fa-3x text-primary"></i>
+                    </div>
+                    <h4>Spam Detection</h4>
+                    <p>Advanced spam mail filtering and classification using machine learning algorithms.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-question-circle fa-3x text-primary"></i>
+                    </div>
+                    <h4>Security Quiz</h4>
+                    <p>Interactive cybersecurity awareness training and knowledge assessment.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-line fa-3x text-primary"></i>
+                    </div>
+                    <h4>Real-time Monitoring</h4>
+                    <p>Continuous threat monitoring with live dashboards and instant alerts.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-shield-alt fa-3x text-primary"></i>
+                    </div>
+                    <h4>Threat Intelligence</h4>
+                    <p>Comprehensive threat database with up-to-date security information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-team py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Meet Our Team</h2>
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <div class="team-member">
+                    <i class="fas fa-user-circle fa-4x text-primary mb-3"></i>
+                    <h5>Security Experts</h5>
+                    <p>Our team of cybersecurity professionals brings years of experience in threat detection and analysis.</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="team-member">
+                    <i class="fas fa-code fa-4x text-primary mb-3"></i>
+                    <h5>Developers</h5>
+                    <p>Dedicated developers working on cutting-edge technologies to enhance platform capabilities.</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="team-member">
+                    <i class="fas fa-headset fa-4x text-primary mb-3"></i>
+                    <h5>Support Team</h5>
+                    <p>24/7 support to ensure our users have the best experience and security.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-contact py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2>Get in Touch</h2>
+        <p>Have questions about CyberPhishGuard+? Contact us for more information.</p>
+        <a href="mailto:info@cyberphishguard.com" class="btn btn-light btn-lg">Contact Us</a>
+    </div>
+</section>
+{% endblock %}

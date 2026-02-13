@@ -1,0 +1,144 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Home - CyberSecurity Threat Detection{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="hero-title">CyberPhishGuard+ - Cybersecurity Threat Intelligence Platform</h1>
+                <p class="hero-subtitle">Comprehensive platform for real-time threat monitoring, file scanning, and security analysis. Protect your digital assets with cutting-edge technology.</p>
+                <div class="hero-buttons">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-glow">Access Dashboard</a>
+                        <a href="#features" class="btn btn-outline-light btn-glow-outline">Learn More</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary btn-glow">Get Started</a>
+                        <a href="#features" class="btn btn-outline-light btn-glow-outline">Learn More</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-visual">
+                    <div class="cyber-shield">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<section id="features" class="features-section">
+    <div class="container">
+        <h2 class="section-title">Key Features</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>File Scanning</h3>
+                    <p>Advanced malware detection with confidence scoring and detailed analysis reports.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3>URL Scanning</h3>
+                    <p>Comprehensive phishing URL detection and analysis for email security.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Spam Detection</h3>
+                    <p>Advanced spam mail filtering and classification with machine learning algorithms.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3>Security Quiz</h3>
+                    <p>Interactive cybersecurity awareness training and knowledge assessment.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Real-time Monitoring</h3>
+                    <p>Continuous threat monitoring with live dashboards and instant alerts.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Threat Intelligence</h3>
+                    <p>Comprehensive threat database with up-to-date security information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if user.is_authenticated %}
+<section class="latest-activity">
+    <div class="container">
+        <h2 class="section-title">Latest Activity</h2>
+        <div class="activity-list">
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-file-upload"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>File scan completed</h4>
+                    <p>document.pdf scanned - No threats detected</p>
+                    <small>2 minutes ago</small>
+                </div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>Threat alert</h4>
+                    <p>Suspicious activity detected from IP 192.168.1.100</p>
+                    <small>15 minutes ago</small>
+                </div>
+            </div>
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="activity-content">
+                    <h4>User login</h4>
+                    <p>{{ user.username }} logged in successfully</p>
+                    <small>1 hour ago</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+=======
+    <div class="container">
+        <h1>Welcome to My Django Website</h1>
+        <button id="change-text-btn">Click me to change text</button>
+        <p id="text-to-change">This text will change when you click the button.</p>
+        <a href="/about/">About</a>
+    </div>

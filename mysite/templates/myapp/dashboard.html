@@ -1,0 +1,247 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - CyberSecurity Threat Detection{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="container-fluid">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Security Dashboard</h1>
+            <div class="dashboard-time">Last updated: <span id="current-time">{{ current_time }}</span></div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-value">{{ total_scans|default:0 }}</div>
+                <div class="stat-label">Total Scans</div>
+                <div class="stat-change positive">+12%</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-value">{{ threats_detected|default:0 }}</div>
+                <div class="stat-label">Threats Detected</div>
+                <div class="stat-change negative">+5%</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-value">{{ active_users|default:0 }}</div>
+                <div class="stat-label">Registered Users</div>
+                <div class="stat-change positive">+8%</div>
+            </div>
+        </div>
+
+        <!-- Threat Statistics -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3><i class="fas fa-shield-alt"></i> Threat Statistics</h3>
+                <div id="chart-controls">
+                    <button id="load-charts-btn" class="btn btn-primary btn-sm">Load Visualizations</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="charts-container" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Threat Types</h5>
+                            <canvas id="threatTypesChart" style="max-height: 300px;"></canvas>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Severity Levels</h5>
+                            <canvas id="severityChart" style="max-height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="threat-stats-grid">
+                    <div class="threat-stat-item">
+                        <span class="threat-stat-label">🕵️ Phishing</span>
+                        <span class="threat-stat-value">{{ threat_stats.phishing|default:0 }}</span>
+                    </div>
+                    <div class="threat-stat-item">
+                        <span class="threat-stat-label">🦠 Malware</span>
+                        <span class="threat-stat-value">{{ threat_stats.malware|default:0 }}</span>
+                    </div>
+                    <div class="threat-stat-item">
+                        <span class="threat-stat-label">⚠️ Critical</span>
+                        <span class="threat-stat-value">{{ threat_stats.critical|default:0 }}</span>
+                    </div>
+                    <div class="threat-stat-item">
+                        <span class="threat-stat-label">🔍 Analyzing</span>
+                        <span class="threat-stat-value">{{ threat_stats.analyzing|default:0 }}</span>
+                    </div>
+                    <div class="threat-stat-item">
+                        <span class="threat-stat-label">✅ Resolved</span>
+                        <span class="threat-stat-value">{{ threat_stats.resolved|default:0 }}</span>
+                    </div>
+                    <div class="threat-stat-item">
+                        <span class="threat-stat-label">❓ Unresolved</span>
+                        <span class="threat-stat-value">{{ threat_stats.unresolved|default:0 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Recent Threats Table -->
+            <div class="col-lg-8">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-list"></i> Recent Threats</h3>
+                        <a href="{% url 'all_threats' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="threats-table">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Threat Level</th>
+                                        <th>Confidence</th>
+                                        <th>Timestamp</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for threat in recent_threats %}
+                                    <tr>
+                                        <td>{{ threat.threat_type|title }}</td>
+                                        <td><span class="badge badge-{{ threat.severity }}">{{ threat.severity|title }}</span></td>
+                                        <td>{{ threat.confidence_score }}%</td>
+                                        <td>{{ threat.timestamp|date:"Y-m-d H:i" }}</td>
+                                        <td><button class="btn btn-sm btn-danger">Quarantine</button></td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">No recent threats.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loadChartsBtn = document.getElementById('load-charts-btn');
+    const chartControls = document.getElementById('chart-controls');
+    const chartsContainer = document.getElementById('charts-container');
+
+    let chartsLoaded = false;
+    let chartsCreated = false;
+    let hideChartsBtn;
+
+    loadChartsBtn.addEventListener('click', function() {
+        if (!chartsLoaded) {
+            if (!chartsCreated) {
+                // Threat Types Pie Chart
+                const threatTypesCtx = document.getElementById('threatTypesChart').getContext('2d');
+                const threatTypesData = {
+                    labels: ['Phishing', 'Malware', 'Other'],
+                    datasets: [{
+                        data: [{{ threat_stats.phishing|default:0 }}, {{ threat_stats.malware|default:0 }}, {{ threat_stats.total|default:0|add:threat_stats.phishing|add:threat_stats.malware|default:0 }}],
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                    }]
+                };
+                new Chart(threatTypesCtx, {
+                    type: 'pie',
+                    data: threatTypesData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + context.parsed + ' threats';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Severity Levels Bar Chart
+                const severityCtx = document.getElementById('severityChart').getContext('2d');
+                const severityData = {
+                    labels: ['Low', 'Medium', 'High', 'Critical'],
+                    datasets: [{
+                        label: 'Threats by Severity',
+                        data: [{{ threat_stats.low|default:0 }}, {{ threat_stats.medium|default:0 }}, {{ threat_stats.high|default:0 }}, {{ threat_stats.critical|default:0 }}],
+                        backgroundColor: ['#4CAF50', '#FF9800', '#F44336', '#9C27B0'],
+                        borderColor: ['#4CAF50', '#FF9800', '#F44336', '#9C27B0'],
+                        borderWidth: 1
+                    }]
+                };
+                new Chart(severityCtx, {
+                    type: 'bar',
+                    data: severityData,
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.parsed.y + ' threats';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                chartsCreated = true;
+            }
+
+            // Show the charts
+            chartsContainer.style.display = 'block';
+            chartsLoaded = true;
+
+            // Create and add the Shrink Charts button
+            hideChartsBtn = document.createElement('button');
+            hideChartsBtn.id = 'hide-charts-btn';
+            hideChartsBtn.className = 'btn btn-outline-danger btn-sm';
+            hideChartsBtn.textContent = 'Shrink Charts';
+            chartControls.appendChild(hideChartsBtn);
+
+            // Add event listener to the new button
+            hideChartsBtn.addEventListener('click', function() {
+                // Hide the charts container
+                chartsContainer.style.display = 'none';
+                chartsLoaded = false;
+                // Remove the button
+                chartControls.removeChild(hideChartsBtn);
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% endblock %}

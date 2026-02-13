@@ -1,0 +1,195 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}URL Scanner{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="scan-card">
+                <div class="card-header">
+                    <h2 class="mb-0"><i class="fas fa-link"></i> URL Phishing Scanner</h2>
+                    <p class="text-muted mt-2">Enter a URL to analyze for potential phishing threats</p>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="url-scan-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="{{ form.url.id_for_label }}" class="form-label">
+                                <i class="fas fa-globe"></i> Enter URL to scan for phishing:
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                {{ form.url }}
+                            </div>
+                            {% if form.url.errors %}
+                                <div class="text-danger mt-2">
+                                    {% for error in form.url.errors %}
+                                        <small><i class="fas fa-exclamation-triangle"></i> {{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-glow">
+                            <i class="fas fa-shield-alt"></i> Scan URL
+                        </button>
+                    </form>
+
+                    {% if scan_result %}
+                        <hr class="cyber-divider">
+                        <div class="scan-results">
+                            <h4><i class="fas fa-chart-bar"></i> Scan Results</h4>
+                            <div class="result-card {% if scan_result.is_phishing %}phishing-detected{% else %}safe-url{% endif %}">
+                                <div class="result-header">
+                                    <div class="result-icon">
+                                        {% if scan_result.blocked %}
+                                            <i class="fas fa-ban"></i>
+                                        {% elif scan_result.is_phishing %}
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        {% else %}
+                                            <i class="fas fa-check-circle"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="result-text">
+                                        <strong>Result:</strong> {% if scan_result.blocked %}Blocked{% elif scan_result.is_phishing %}Phishing Detected{% else %}Safe{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="result-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-percentage"></i>
+                                    <span><strong>Confidence Score:</strong> {{ scan_result.confidence_score }}%</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <span><strong>Risk Level:</strong> {{ scan_result.risk_level }}</span>
+                                </div>
+                            </div>
+                            {% if scan_result.alerts %}
+                                <div class="alerts-section">
+                                    <h5><i class="fas fa-bell"></i> Alerts:</h5>
+                                    <ul class="alerts-list">
+                                        {% for alert in scan_result.alerts %}
+                                            <li><i class="fas fa-arrow-right"></i> {{ alert }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.url-scan-form .input-group-text {
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    color: #00ff88;
+}
+
+.url-scan-form .form-control {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    color: #ffffff;
+}
+
+.url-scan-form .form-control:focus {
+    border-color: #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.cyber-divider {
+    border-color: rgba(0, 255, 136, 0.3);
+    margin: 30px 0;
+}
+
+.scan-results h4 {
+    color: #00ff88;
+    margin-bottom: 20px;
+}
+
+.result-card {
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid;
+    backdrop-filter: blur(10px);
+}
+
+.phishing-detected {
+    background: rgba(255, 107, 107, 0.1);
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+.safe-url {
+    background: rgba(0, 255, 136, 0.1);
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+.blocked-url {
+    background: rgba(255, 0, 0, 0.1);
+    border-color: #ff0000;
+    color: #ff0000;
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.result-icon {
+    font-size: 2rem;
+    margin-right: 15px;
+}
+
+.result-text {
+    font-size: 1.2rem;
+}
+
+.result-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    color: #cccccc;
+}
+
+.detail-item i {
+    margin-right: 10px;
+    color: #00ff88;
+}
+
+.alerts-section h5 {
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+.alerts-list {
+    list-style: none;
+    padding: 0;
+}
+
+.alerts-list li {
+    color: #cccccc;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.alerts-list li i {
+    margin-right: 10px;
+    color: #ff6b6b;
+}
+</style>
+{% endblock %}
