@@ -18,3 +18,9 @@ mysite/db.sqlite3
 # OS files
 .DS_Store
 Thumbs.db
+
+# Project specific files
+TODO.md
+inspect_db.py
+test_auth.py
+"capstone project summary"

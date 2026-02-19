@@ -24,6 +24,7 @@ body {
         radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.3) 0%, transparent 50%);
     background-attachment: fixed;
     position: relative;
+    color: #ffffff;
 }
 
 .cyber-bg::before {
@@ -36,6 +37,52 @@ body {
     background-image:
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Dark Background Theme - Light Text */
+.dark-bg {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    background-attachment: fixed;
+    position: relative;
+    color: #ffffff;
+}
+
+.dark-bg::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Light Background Theme - Dark Text */
+.light-bg {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background-attachment: fixed;
+    position: relative;
+    color: #1a1a2e;
+}
+
+.light-bg::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
     background-size: 50px 50px;
     pointer-events: none;
     z-index: -1;
@@ -957,4 +1004,192 @@ body {
         transform: translateY(-100vh) rotate(360deg);
         opacity: 0;
     }
+}
+
+/* ========================
+   LIGHT THEME STYLES 
+   ======================== */
+.light-bg .hero-title {
+    background: linear-gradient(45deg, #0066cc, #004499, #003366);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+}
+
+.light-bg .hero-subtitle {
+    color: #333333;
+}
+
+.light-bg .section-title {
+    color: #1a1a2e;
+    text-shadow: none;
+}
+
+.light-bg .feature-card,
+.light-bg .stat-card,
+.light-bg .dashboard-card,
+.light-bg .scan-card,
+.light-bg .login-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 102, 204, 0.3);
+}
+
+.light-bg .feature-card h3,
+.light-bg .stat-number,
+.light-bg .stat-value,
+.light-bg .upload-content h4,
+.light-bg .option-content h5 {
+    color: #1a1a2e;
+}
+
+.light-bg .feature-card p,
+.light-bg .stat-label,
+.light-bg .option-content p {
+    color: #555555;
+}
+
+.light-bg .form-group label {
+    color: #1a1a2e;
+}
+
+.light-bg .form-control {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 102, 204, 0.5);
+    color: #1a1a2e;
+}
+
+.light-bg .form-control::placeholder {
+    color: #666666;
+}
+
+.light-bg .card-header h3,
+.light-bg .dashboard-header h1,
+.light-bg .scan-header h1,
+.light-bg .about-header h1 {
+    color: #0066cc;
+}
+
+.light-bg .login-header h2 {
+    color: #0066cc;
+}
+
+.light-bg .login-header p {
+    color: #555555;
+}
+
+.light-bg .navbar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-bottom: 1px solid rgba(0, 102, 204, 0.2);
+}
+
+.light-bg .cyber-navbar .navbar-brand {
+    color: #0066cc !important;
+    text-shadow: none;
+}
+
+.light-bg .cyber-navbar .nav-link {
+    color: #1a1a2e !important;
+}
+
+.light-bg .cyber-navbar .nav-link:hover {
+    color: #0066cc !important;
+}
+
+.light-bg .btn-glow {
+    border-color: #0066cc;
+    color: #0066cc;
+    box-shadow: 0 0 20px rgba(0, 102, 204, 0.3);
+}
+
+.light-bg .btn-glow:hover {
+    background: #0066cc;
+    color: #ffffff;
+}
+
+.light-bg .btn-glow-outline {
+    border-color: #1a1a2e;
+    color: #1a1a2e;
+}
+
+.light-bg .btn-glow-outline:hover {
+    background: #1a1a2e;
+    color: #ffffff;
+}
+
+.light-bg .cyber-footer {
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid rgba(0, 102, 204, 0.2);
+}
+
+.light-bg .cyber-footer h5 {
+    color: #0066cc;
+}
+
+.light-bg .cyber-footer p,
+.light-bg .footer-links a {
+    color: #555555;
+}
+
+.light-bg .footer-links a:hover {
+    color: #0066cc;
+}
+
+.light-bg .status-indicator {
+    color: #0066cc;
+}
+
+.light-bg .theme-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 102, 204, 0.3);
+    color: #0066cc;
+}
+
+.light-bg .theme-options {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(0, 102, 204, 0.3);
+}
+
+.light-bg .theme-option {
+    color: #1a1a2e;
+}
+
+.light-bg .theme-option:hover {
+    background: rgba(0, 102, 204, 0.1);
+}
+
+.light-bg .dashboard-time,
+.light-bg .text-muted {
+    color: #555555;
+}
+
+.light-bg .cyber-shield {
+    color: #0066cc;
+    text-shadow: 0 0 30px rgba(0, 102, 204, 0.3);
+}
+
+.light-bg .stat-icon,
+.light-bg .feature-icon,
+.light-bg .upload-icon,
+.light-bg .tech-icon,
+.light-bg .commitment-icon {
+    color: #0066cc;
+}
+
+.light-bg .file-details {
+    color: #1a1a2e;
+}
+
+.light-bg .feature-item {
+    color: #555555;
+}
+
+.light-bg .about-section p {
+    color: #333333;
+}
+
+.light-bg .tech-item h4,
+.light-bg .commitment-item h4 {
+    color: #1a1a2e;
 }
