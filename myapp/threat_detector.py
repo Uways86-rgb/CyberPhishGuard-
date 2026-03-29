@@ -75,6 +75,7 @@ class AdvancedThreatDetector:
             'google.com', 'google.co.uk', 'facebook.com', 'amazon.com', 'apple.com',
             'microsoft.com', 'microsoft.co.uk', 'linkedin.com', 'twitter.com',
             'instagram.com', 'netflix.com', 'dropbox.com', 'adobe.com', 'paypal.com',
+            'chatgpt.com', 'openai.com',
             # Banking (major institutions)
             'chase.com', 'wellsfargo.com', 'bankofamerica.com', 'citibank.com',
             'usbank.com', 'capitalone.com', 'barclays.co.uk', 'hsbc.co.uk',
@@ -94,7 +95,7 @@ class AdvancedThreatDetector:
 
     def is_whitelisted_domain(self, domain):
         """Check if domain is whitelisted (trusted)"""
-        domain_lower = domain.lower()
+        domain_lower = domain.lower().split('@')[-1].split(':')[0].strip()
         
         # Check exact matches
         if domain_lower in self.whitelisted_domains:
@@ -102,14 +103,22 @@ class AdvancedThreatDetector:
         
         # Check TLD-based whitelist
         for trusted in self.whitelisted_domains:
-            if domain_lower.endswith('.' + trusted) or domain_lower == trusted:
+            if domain_lower == trusted or domain_lower.endswith('.' + trusted):
                 return True, f"Domain uses trusted TLD: .{trusted}"
         
-        # Check if it's a known safe domain (contains trusted keywords)
-        trusted_keywords = ['university', 'college', 'school', 'government', 'ac.', 'edu', 'gov', 'hospital']
+        # Check if it's a known safe domain (contains trusted keywords in a domain label)
+        trusted_keywords = ['university', 'college', 'school', 'government', 'ac', 'edu', 'gov', 'hospital']
+        domain_parts = domain_lower.split('.')
         for keyword in trusted_keywords:
-            if keyword in domain_lower:
-                return True, f"Domain contains trusted keyword: {keyword}"
+            if keyword == 'ac':
+                if any(part.endswith('ac') for part in domain_parts):
+                    return True, "Domain contains trusted academic label: ac"
+            elif keyword in ['edu', 'gov', 'hospital']:
+                if any(part == keyword for part in domain_parts) or domain_lower.endswith('.' + keyword):
+                    return True, f"Domain contains trusted keyword: {keyword}"
+            else:
+                if keyword in domain_lower:
+                    return True, f"Domain contains trusted keyword: {keyword}"
         
         return False, None
 
@@ -693,6 +702,21 @@ class AdvancedThreatDetector:
         
         if is_trusted:
             all_alerts.append(f"✓ Domain is trusted: {trust_reason}")
+            all_alerts.insert(0, f"✅ Trusted domain override: {domain} is treated as CLEAN")
+            print(f"  ✅ Trusted domain override: {domain} is treated as CLEAN")
+            return {
+                'is_phishing': False,
+                'confidence_score': 0,
+                'alerts': all_alerts,
+                'risk_level': 'low',
+                'analysis_details': {
+                    'structure_score': 0,
+                    'ssl_score': 0,
+                    'content_score': 0,
+                    'dns_score': 0,
+                    'threat_intelligence_score': 0
+                }
+            }
         
         # Phase 1: URL Structure Analysis (1-2 seconds)
         print("  📊 Analyzing URL structure...")
@@ -772,13 +796,14 @@ class AdvancedThreatDetector:
         
         # Add final verdict for trusted domains
         if is_trusted:
+            total_score = 0
             risk_level = 'low'
-            all_alerts.insert(0, f"🎓 This is a trusted educational institution: {domain}")
+            all_alerts.insert(0, f"✅ Trusted domain override: {domain} is treated as CLEAN")
         
         print(f"  ✅ Analysis complete! Risk Level: {risk_level}, Score: {total_score}")
         
         return {
-            'is_phishing': total_score >= 30,
+            'is_phishing': False if is_trusted else total_score >= 30,
             'confidence_score': min(total_score, 100),
             'alerts': all_alerts,
             'risk_level': risk_level,
