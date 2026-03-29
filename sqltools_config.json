@@ -14,6 +14,12 @@
       "applicationName": "vscode-sqltools",
       "keepAlive": true,
       "keepAliveInitialDelay": 0
+    },
+    {
+      "name": "CyberPhishGuard SQLite DB",
+      "dialect": "SQLite",
+      "database": "c:/Users/User 1/.vscode/Test Django/CyberPhishGuard-/mysite/db.sqlite3",
+      "connectionTimeout": 60000
     }
   ]
 }

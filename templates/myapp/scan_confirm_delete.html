@@ -1,0 +1,24 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Delete Scan - CyberSecurity Threat Detection{% endblock %}
+
+{% block content %}
+<div class="dashboard-container py-4">
+    <div class="container">
+        <div class="card shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h2 class="mb-0">Delete Scan</h2>
+            </div>
+            <div class="card-body">
+                <p>Are you sure you want to permanently delete scan record <strong>#{{ scan_obj.pk }}</strong>?</p>
+                <p><strong>Type:</strong> {{ scan_obj.get_scan_type_display }}</p>
+                <p><strong>Target:</strong> {{ scan_obj.target }}</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <a href="{% url 'scan_management' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-danger">Delete Scan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

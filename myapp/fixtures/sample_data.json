@@ -1,0 +1,76 @@
+[
+  {
+    "model": "myapp.threatintelligence",
+    "pk": 1,
+    "fields": {
+      "indicator_type": "URL",
+      "indicator_value": "http://malicious-phish-site.com/login",
+      "threat_type": "phishing",
+      "severity": "high",
+      "description": "Fake bank login phishing site",
+      "source": "Internal Scan",
+      "is_active": true,
+      "created_at": "2024-01-01T10:00:00Z",
+      "updated_at": "2024-01-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "myapp.threatintelligence",
+    "pk": 2,
+    "fields": {
+      "indicator_type": "IP",
+      "indicator_value": "192.168.1.100",
+      "threat_type": "malware",
+      "severity": "critical",
+      "description": "C2 server for ransomware",
+      "source": "Threat Feed",
+      "is_active": true,
+      "created_at": "2024-01-02T12:00:00Z",
+      "updated_at": "2024-01-02T12:00:00Z"
+    }
+  },
+  {
+    "model": "myapp.scanlog",
+    "pk": 1,
+    "fields": {
+      "scan_type": "URL",
+      "target": "http://malicious-phish-site.com",
+      "result": "INFECTED",
+      "scan_time": "2024-01-01T10:05:00Z",
+      "duration": "0:00:05.123456",
+      "user": null
+    }
+  },
+  {
+    "model": "myapp.threatlog",
+    "pk": 1,
+    "fields": {
+      "threat_type": "phishing",
+      "severity": "high",
+      "status": "detected",
+      "source_ip": "203.0.113.1",
+      "target_ip": "192.168.1.50",
+      "url": "http://malicious-phish-site.com/login",
+      "file_hash": null,
+      "description": "Phishing attempt detected via URL scan",
+      "detection_method": "VirusTotal API",
+      "confidence_score": 95,
+      "timestamp": "2024-01-01T10:05:00Z",
+      "reported_by": null
+    }
+  },
+  {
+    "model": "myapp.quizlog",
+    "pk": 1,
+    "fields": {
+      "user": null,
+      "timestamp": "2024-01-01T14:00:00Z",
+      "score": 8,
+      "total_questions": 10,
+      "percentage": "80.00",
+      "wrong_questions": [3, 7],
+      "full_answers": {"1": "A", "2": "B", "3": "D", "4": "A", "5": "C", "6": "B", "7": "A", "8": "C", "9": "B", "10": "D"},
+      "resources": "Security Awareness Quiz"
+    }
+  }
+]

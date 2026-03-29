@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.forms import PasswordChangeForm
 
 def staff_required(user):
     return user.is_staff
+
 
 def superuser_required(user):
     return user.is_superuser
@@ -16,7 +18,7 @@ from django.core.paginator import Paginator
 from django.db.models import Max
 from django.db.models.functions import TruncDate
 from datetime import datetime, timedelta
-from .forms import CustomUserCreationForm, URLScanForm, EmailScanForm
+from .forms import CustomUserCreationForm, CustomUserEditForm, URLScanForm, EmailScanForm, ScanLogForm
 from .threat_detector import ThreatDetector
 from .malware_hashes import is_malware_hash
 from .models import ThreatLog, ScanLog, ThreatIntelligence, QuizLog, LoginLog, LogoutLog
@@ -259,9 +261,13 @@ def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            messages.success(request, f'Account created successfully for {user.username}. Please log in.')
-            return redirect('login')
+            username = form.cleaned_data['username']
+            if User.objects.filter(username=username).exists():
+                form.add_error('username', 'A user with that username already exists.')
+            else:
+                user = form.save()
+                messages.success(request, f'Account created successfully for {user.username}. Please log in.')
+                return redirect('login')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -278,9 +284,13 @@ def admin_register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            messages.success(request, f'User {user.username} has been registered successfully.')
-            return redirect('user_management')
+            username = form.cleaned_data['username']
+            if User.objects.filter(username=username).exists():
+                form.add_error('username', 'A user with that username already exists.')
+            else:
+                user = form.save()
+                messages.success(request, f'User {user.username} has been registered successfully.')
+                return redirect('user_management')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -296,6 +306,148 @@ def user_management(request):
 
     users = User.objects.all()
     return render(request, 'myapp/user_management.html', {'users': users})
+
+@login_required
+def profile(request):
+    return render(request, 'myapp/profile.html', {
+        'user_obj': request.user,
+    })
+
+@login_required
+def profile_edit(request):
+    user = request.user
+    if request.method == 'POST':
+        form = CustomUserEditForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = CustomUserEditForm(instance=user)
+
+    return render(request, 'myapp/user_form.html', {
+        'form': form,
+        'heading': 'Edit Your Profile',
+        'submit_label': 'Save Changes',
+        'back_url': 'profile'
+    })
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password has been updated successfully.')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'myapp/change_password.html', {
+        'form': form,
+        'heading': 'Change Password',
+        'back_url': 'profile'
+    })
+
+@login_required
+def user_edit(request, user_id):
+    user_obj = get_object_or_404(User, pk=user_id)
+    if request.user != user_obj and not request.user.is_staff:
+        messages.error(request, 'You do not have permission to edit this user.')
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        form = CustomUserEditForm(request.POST, instance=user_obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'{user_obj.username} has been updated successfully.')
+            return redirect('user_management' if request.user.is_staff else 'dashboard')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = CustomUserEditForm(instance=user_obj)
+
+    return render(request, 'myapp/user_form.html', {
+        'form': form,
+        'heading': f'Edit User: {user_obj.username}',
+        'submit_label': 'Update User',
+        'back_url': 'user_management'
+    })
+
+@login_required
+def user_delete(request, user_id):
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to delete users.')
+        return redirect('dashboard')
+
+    user_obj = get_object_or_404(User, pk=user_id)
+    if user_obj == request.user:
+        messages.error(request, 'You cannot delete your own account from this screen.')
+        return redirect('user_management')
+
+    if request.method == 'POST':
+        user_obj.delete()
+        messages.success(request, f'User {user_obj.username} has been deleted successfully.')
+        return redirect('user_management')
+
+    return render(request, 'myapp/user_confirm_delete.html', {'user_obj': user_obj})
+
+@login_required
+def scan_management(request):
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to access scan management.')
+        return redirect('dashboard')
+
+    scans = ScanLog.objects.all().order_by('-scan_time')
+    paginator = Paginator(scans, 15)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'myapp/scan_management.html', {'page_obj': page_obj})
+
+@login_required
+def scan_edit(request, scan_id):
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to edit scans.')
+        return redirect('dashboard')
+
+    scan_obj = get_object_or_404(ScanLog, pk=scan_id)
+    if request.method == 'POST':
+        form = ScanLogForm(request.POST, instance=scan_obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Scan record updated successfully.')
+            return redirect('scan_management')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = ScanLogForm(instance=scan_obj)
+
+    return render(request, 'myapp/scan_form.html', {
+        'form': form,
+        'heading': f'Edit Scan #{scan_obj.pk}',
+        'submit_label': 'Update Scan',
+        'back_url': 'scan_management'
+    })
+
+@login_required
+def scan_delete(request, scan_id):
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to delete scans.')
+        return redirect('dashboard')
+
+    scan_obj = get_object_or_404(ScanLog, pk=scan_id)
+    if request.method == 'POST':
+        scan_obj.delete()
+        messages.success(request, 'Scan record deleted successfully.')
+        return redirect('scan_management')
+
+    return render(request, 'myapp/scan_confirm_delete.html', {'scan_obj': scan_obj})
 
 @login_required
 def all_threats(request):

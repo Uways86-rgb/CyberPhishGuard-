@@ -1,0 +1,22 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Delete User - CyberSecurity Threat Detection{% endblock %}
+
+{% block content %}
+<div class="dashboard-container py-4">
+    <div class="container">
+        <div class="card shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h2 class="mb-0">Delete User</h2>
+            </div>
+            <div class="card-body">
+                <p>Are you sure you want to permanently delete the user <strong>{{ user_obj.username }}</strong>?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <a href="{% url 'user_management' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-danger">Delete User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

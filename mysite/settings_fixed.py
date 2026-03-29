@@ -123,4 +123,3 @@ STATICFILES_DIRS = [
 
 # Authentication settings
 LOGIN_URL = '/login/'
-
