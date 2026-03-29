@@ -1,0 +1,207 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Logout Logs - CyberSecurity Threat Detection{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="container-fluid">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-sign-out-alt"></i> Logout Logs</h1>
+            <div class="dashboard-time">Last updated: <span>{{ current_time }}</span></div>
+            <a href="{% url 'user_breakdown' %}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-arrow-left"></i> Back to Users
+            </a>
+        </div>
+
+        <!-- Logout Stats -->
+        <div class="stats-grid mb-5">
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <div class="stat-value">{{ logout_stats.total }}</div>
+                <div class="stat-label">Total Logouts</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle text-success"></i>
+                </div>
+                <div class="stat-value">{{ logout_stats.successful }}</div>
+                <div class="stat-label">Successful</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">
+                    <i class="fas fa-times-circle text-danger"></i>
+                </div>
+                <div class="stat-value">{{ logout_stats.failed }}</div>
+                <div class="stat-label">Failed</div>
+            </div>
+        </div>
+
+        <!-- Recent Logouts -->
+        <div class="row mb-5">
+            <div class="col-lg-8">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h5>Recent Logouts (Last 20)</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Logout Time</th>
+                                        <th>IP Address</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in recent_logouts %}
+                                    <tr>
+                                        <td><strong>{{ log.user.username }}</strong></td>
+                                        <td>{{ log.user.email|default:"No email" }}</td>
+                                        <td>{{ log.logout_time|date:"M d, Y H:i" }}</td>
+                                        <td>{{ log.ip_address|default:"—" }}</td>
+                                        <td>
+                                            <span class="badge bg-success">Success</span>
+                                            {% if log.status == 'failed' %}<span class="badge bg-danger">Failed</span>{% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">No logout logs found</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="dashboard-card h-100">
+                    <div class="card-header">
+                        <h5>Logout Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li><strong>Total Logouts:</strong> {{ logout_stats.total }}</li>
+                            <li><strong>Successful:</strong> {{ logout_stats.successful }}</li>
+                            <li><strong>Failed:</strong> {{ logout_stats.failed }}</li>
+                        </ul>
+                        <hr>
+                        <p class="small text-muted">
+                            Logout logs are automatically tracked when users log out.
+                            Failed logouts occur due to session issues or abnormal termination.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Logouts Table -->
+        <div class="row">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>All Logouts ({{ logouts_page.paginator.count }})</h5>
+                        {% if logouts_page.has_other_pages %}
+                        <div class="pagination-info">
+                            Page {{ logouts_page.number }} of {{ logouts_page.paginator.num_pages }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Logout Time</th>
+                                        <th>IP Address</th>
+                                        <th>Session ID</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in logouts_page %}
+                                    <tr>
+                                        <td><strong>{{ log.user.username }}</strong></td>
+                                        <td>{{ log.user.email|default:"—" }}</td>
+                                        <td>{{ log.logout_time|date:"M d, Y H:i" }}</td>
+                                        <td>{{ log.ip_address|default:"—" }}</td>
+                                        <td>{{ log.session_id|slice:":8" }}...</td>
+                                        <td>
+                                            <span class="badge bg-success">Success</span>
+                                            {% if log.status == 'failed' %}<span class="badge bg-danger">Failed</span>{% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-4">No logout logs found</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if logouts_page.has_other_pages %}
+                        <nav class="d-flex justify-content-center">
+                            <ul class="pagination">
+                                {% if logouts_page.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1">&laquo; First</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ logouts_page.previous_page_number }}">Previous</a>
+                                    </li>
+                                {% endif %}
+
+                                {% for num in logouts_page.paginator.page_range %}
+                                    {% if logouts_page.number == num %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ num }}</span>
+                                        </li>
+                                    {% elif num > logouts_page.number|add:'-3' and num < logouts_page.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if logouts_page.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ logouts_page.next_page_number }}">Next</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ logouts_page.paginator.num_pages }}">Last &raquo;</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.stat-box:hover {
+    text-decoration: none;
+    color: inherit;
+    transform: translateY(-2px);
+}
+.dashboard-card .table th {
+    border-top: none;
+}
+.pagination .page-link {
+    border-radius: 0.375rem;
+}
+</style>
+
+{% endblock %}

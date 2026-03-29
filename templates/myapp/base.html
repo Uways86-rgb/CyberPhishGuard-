@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CyberSecurity Threat Detection{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'myapp/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="cyber-bg">
+
+
+    <!-- Particles Container -->
+    <div id="particles-container" class="particles-container"></div>
+
+    <!-- Circuit Background -->
+    <div class="circuit-bg"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark cyber-navbar">
+        <div class="container">
+            <a class="navbar-brand cyber-brand" href="{% url 'home' %}">
+                <i class="fas fa-shield-alt"></i> CyberThreat Detector
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'scan_url' %}"><i class="fas fa-link"></i> Scan URL</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'scan_email' %}"><i class="fas fa-envelope"></i> Scan Email</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'malware' %}"><i class="fas fa-bug"></i> Malware Detection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'quiz' %}"><i class="fas fa-question-circle"></i> Security Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'resources' %}"><i class="fas fa-book-open"></i> Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}"><i class="fas fa-info-circle"></i> About</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+{% if request.user.is_authenticated %}
+    {% if request.user.is_superuser %}
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="superuserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-crown"></i> Superuser
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="superuserDropdown">
+            <li><a class="dropdown-item" href="{% url 'superuser_dashboard' %}"><i class="fas fa-key"></i> Control Panel</a></li>
+        </ul>
+    </li>
+    {% endif %}
+                        <li class="nav-item">
+                            <span class="navbar-text me-3">👋 Welcome, <strong>{{ request.user.username }}</strong></span>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-light btn-sm">
+                                    🚪 Logout
+                                </button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">🔑 Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">📝 Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="cyber-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-shield-alt"></i> CyberSecurity Threat</h5>
+                    <p>Advanced threat detection and monitoring platform for comprehensive security analysis.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="text-center mb-3">Quick Links</h5>
+                    <div class="footer-links row g-2 list-unstyled mb-0">
+                        <div class="col-6 text-center"><a href="{% url 'home' %}" class="d-block py-1 text-decoration-none fw-medium">Home</a></div>
+                        <div class="col-6 text-center"><a href="{% url 'dashboard' %}" class="d-block py-1 text-decoration-none fw-medium">Dashboard</a></div>
+                        <div class="col-6 text-center"><a href="{% url 'scan_url' %}" class="d-block py-1 text-decoration-none fw-medium">URL Scanner</a></div>
+                        <div class="col-6 text-center"><a href="{% url 'scan_email' %}" class="d-block py-1 text-decoration-none fw-medium">Email Scanner</a></div>
+                        <div class="col-6 text-center"><a href="{% url 'malware' %}" class="d-block py-1 text-decoration-none fw-medium">Malware</a></div>
+                        <div class="col-6 text-center"><a href="{% url 'quiz' %}" class="d-block py-1 text-decoration-none fw-medium">Quiz</a></div>
+                        <div class="col-6 text-center"><a href="{% url 'resources' %}" class="d-block py-1 text-decoration-none fw-medium">Resources</a></div>
+                        <div class="col-6 text-center"><a href="{% url 'about' %}" class="d-block py-1 text-decoration-none fw-medium">About</a></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5>Security Status</h5>
+                    <div class="status-indicator">
+                        <i class="fas fa-circle text-success"></i> System Online
+                    </div>
+                    <p>Last scan: <span id="last-scan-time">Just now</span></p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2026 CyberSecurity Threat Detection. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'myapp/js/script.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "connections": [
+    {
+      "name": "CyberPhishGuard MySQL Database",
+      "dialect": "MySQL",
+      "server": "localhost",
+      "port": 3306,
+      "database": "threats_db",
+      "username": "root",
+      "password": "UWAYS2026",
+      "ssl": false,
+      "connectionTimeout": 30000,
+      "requestTimeout": 60000,
+      "applicationName": "vscode-sqltools",
+      "keepAlive": true,
+      "keepAliveInitialDelay": 0
+    }
+  ]
+}

@@ -1,0 +1,266 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Scan Breakdown - CyberSecurity Threat Detection{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="container-fluid">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-chart-bar"></i> Scan Breakdown</h1>
+            <div class="dashboard-time">Last updated: <span>{{ current_time }}</span></div>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Total Stats -->
+        <div class="stats-grid mb-5">
+            <div class="stat-box large">
+                <div class="stat-icon">
+                    <i class="fas fa-file-alt fa-2x"></i>
+                </div>
+                <div class="stat-value">{{ scan_counts.total|default:0 }}</div>
+                <div class="stat-label">Total Scans</div>
+            </div>
+        </div>
+
+        <!-- Breakdown Cards -->
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="dashboard-card">
+                    <h4><i class="fas fa-link text-info"></i> URL Scans</h4>
+                    <div class="stat-value large">{{ scan_counts.url_scans|default:0 }}</div>
+                    <p class="text-muted">{{ scan_counts.url_scans|floatformat:0 }} URL scans performed</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dashboard-card">
+                    <h4><i class="fas fa-envelope text-warning"></i> Email Scans</h4>
+                    <div class="stat-value large">{{ scan_counts.email_scans|default:0 }}</div>
+                    <p class="text-muted">{{ scan_counts.email_scans|floatformat:0 }} spam/phishing email scans</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dashboard-card">
+                    <h4><i class="fas fa-bug text-danger"></i> Malware Scans</h4>
+                    <div class="stat-value large">{{ scan_counts.malware_scans|default:0 }}</div>
+                    <p class="text-muted">{{ scan_counts.malware_scans|floatformat:0 }} file scans</p>
+                </div>
+        </div>
+        </div>
+
+        <!-- Recent Scans Tables -->
+        <div class="row">
+            <!-- Recent URL Scans -->
+            <div class="col-lg-4">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-link text-info"></i> Recent URL Scans (10)</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Target</th>
+                                        <th>Result</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for scan in recent_url %}
+                                    <tr>
+                                        <td class="text-truncate" style="max-width: 150px;">{{ scan.target|slice:":50" }}{% if scan.target|length > 50 %}...{% endif %}</td>
+                                        <td>
+                                            {% if scan.result == 'THREAT' %}
+                                                <span class="badge bg-danger">Threat</span>
+                                            {% else %}
+                                                <span class="badge bg-success">Clean</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ scan.scan_time|date:"H:i" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-4">No URL scans</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Email Scans -->
+            <div class="col-lg-4">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-envelope text-warning"></i> Recent Email Scans (10)</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Result</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for scan in recent_email %}
+                                    <tr>
+                                        <td class="text-truncate" style="max-width: 150px;">{{ scan.target|slice:":50" }}{% if scan.target|length > 50 %}...{% endif %}</td>
+                                        <td>
+                                            {% if scan.result == 'THREAT' %}
+                                                <span class="badge bg-danger">Threat</span>
+                                            {% else %}
+                                                <span class="badge bg-success">Clean</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ scan.scan_time|date:"H:i" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-4">No email scans</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Malware Scans -->
+            <div class="col-lg-4">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-bug text-danger"></i> Recent Malware Scans (10)</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>File</th>
+                                        <th>Result</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for scan in recent_malware %}
+                                    <tr>
+                                        <td class="text-truncate" style="max-width: 150px;">{{ scan.target|slice:":50" }}{% if scan.target|length > 50 %}...{% endif %}</td>
+                                        <td>
+                                            {% if scan.result == 'THREAT' %}
+                                                <span class="badge bg-danger">Threat</span>
+                                            {% else %}
+                                                <span class="badge bg-success">Clean</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ scan.scan_time|date:"H:i" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-4">No malware scans</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if scan_activity %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line"></i> Scan Activity (Last 7 Days)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Count</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for activity in scan_activity %}
+                                    <tr>
+                                        <td>
+                                            {% if activity.scan_type == 'URL' %}<i class="fas fa-link text-info"></i> URL
+                                            {% elif activity.scan_type == 'EMAIL' %}<i class="fas fa-envelope text-warning"></i> Email
+                                            {% elif activity.scan_type == 'MALWARE' %}<i class="fas fa-bug text-danger"></i> Malware
+                                            {% else %}{{ activity.scan_type }}
+                                            {% endif %}
+                                        </td>
+                                        <td><strong>{{ activity.count }}</strong></td>
+                                        <td>
+                                            {% widthratio activity.count scan_counts.total 100 as percent %}
+                                            <div class="progress" style="height: 8px;">
+                                                <div class="progress-bar" style="width: {{ percent }}%;">
+                                                    {{ percent }}%
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.stat-box.large {
+    grid-column: span 1;
+}
+.stat-box.large .stat-icon {
+    font-size: 3rem;
+    height: 80px;
+    width: 80px;
+}
+.dashboard-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+}
+.card-body {
+    padding: 1.5rem;
+}
+.large {
+    font-size: 3rem;
+    font-weight: bold;
+}
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+{% endblock %}

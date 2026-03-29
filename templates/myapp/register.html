@@ -1,0 +1,121 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Register - Cyber Security Threat Detection{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">🛡️ Register for Threat Detection System</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Note:</strong> You must be pre-authorized by an administrator to register.
+                    If you're seeing authorization errors, please contact your system administrator.
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_username" class="form-label">Username *</label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.username.errors %}
+                                    <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if form.username.help_text %}
+                                <div class="form-text">{{ form.username.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_email" class="form-label">Email Address *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.email.errors %}
+                                    <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_password1" class="form-label">Password *</label>
+                                {{ form.password1 }}
+                                {% if form.password1.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.password1.errors %}
+                                    <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if form.password1.help_text %}
+                                <div class="form-text">{{ form.password1.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_password2" class="form-label">Confirm Password *</label>
+                                {{ form.password2 }}
+                                {% if form.password2.errors %}
+                                <div class="text-danger small">
+                                    {% for error in form.password2.errors %}
+                                    <div>{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Register</button>
+                </form>
+
+                <div class="mt-3 text-center">
+                    <p class="mb-0">Already have an account?
+                        <a href="{% url 'login' %}" class="text-success">Login here</a>
+                    </p>
+                </div>
+
+                <div class="mt-3">
+                    <h6>Pre-authorized test accounts (use these credentials):</h6>
+                    <ul class="small text-muted">
+                        <li>Username: <code>john_doe</code> | Email: <code>john@company.com</code></li>
+                        <li>Username: <code>jane_smith</code> | Email: <code>jane@company.com</code></li>
+                        <li>Username: <code>uways</code> | Email: <code>uways0806@gmail.com</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control {
+        width: 100%;
+    }
+    .errorlist {
+        margin: 0;
+        padding: 0;
+    }
+    .errorlist li {
+        list-style: none;
+        color: #dc3545;
+        font-size: 0.875em;
+    }
+</style>
+{% endblock %}

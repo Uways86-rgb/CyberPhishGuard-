@@ -1,0 +1,32 @@
+CyberPhishGuard Quiz Results
+""
+User:,Sam
+Date:,2026-03-28 17:43:10
+Score:,9/10
+Percentage:,90.0%
+""
+Question Number,Question,Your Answer,Correct Answer,Status
+""
+1,What is phishing?,b,A fake attempt to steal personal data,CORRECT
+2,Which password is the strongest?,c,P@ssW0rd#9,CORRECT
+3,What should you do with suspicious email links?,b,Ignore or report,CORRECT
+4,What does HTTPS stand for?,a,Hyper Text Transfer Protocol Secure,CORRECT
+5,What is two-factor authentication (2FA)?,a,A security method requiring two forms of verification,WRONG
+6,Which of these is a sign of a phishing email?,b,Urgent requests for personal information,CORRECT
+7,What should you do before downloading software?,b,Verify the source and scan for viruses,CORRECT
+8,What is malware?,b,Malicious software designed to harm your system,CORRECT
+9,How often should you update your passwords?,b,Every few months or immediately if compromised,CORRECT
+10,What is a VPN used for?,b,"To create a secure, encrypted connection",CORRECT
+""
+Wrong Answers Details:
+""
+Question:,What is two-factor authentication (2FA)?
+Your Answer:,a
+Correct Answer:,A security method requiring two forms of verification
+""
+Summary:
+Total Questions:,10
+Correct Answers:,9
+Wrong Answers:,1
+Percentage:,90.0%
+Achievement:,Good Job!

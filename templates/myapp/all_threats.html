@@ -1,0 +1,74 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}All Threats - CyberSecurity Threat Detection{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-list"></i> All Threats</h1>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h3><i class="fas fa-shield-alt"></i> Threat Log</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="threats-table">
+                    <thead>
+                        <tr>
+                            <th>Threat Type</th>
+                            <th>Severity</th>
+                            <th>Status</th>
+                            <th>Source IP</th>
+                            <th>Description</th>
+                            <th>Detection Method</th>
+                            <th>Confidence</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for threat in threats %}
+                        <tr>
+                            <td>{{ threat.threat_type|title }}</td>
+                            <td><span class="badge badge-{{ threat.severity }}">{{ threat.severity|title }}</span></td>
+                            <td>{{ threat.status|title }}</td>
+                            <td>{{ threat.source_ip|default:"N/A" }}</td>
+                            <td>{{ threat.description }}</td>
+                            <td>{{ threat.detection_method }}</td>
+                            <td>{{ threat.confidence_score }}%</td>
+                            <td>{{ threat.timestamp|date:"Y-m-d H:i" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">No threats found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,554 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}Cybersecurity Resources - CyberPhishGuard{% endblock %}
+
+{% block content %}
+<!-- Video Hero Section -->
+<section class="video-hero mb-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="text-center mb-5">
+                    <h1 class="display-4 fw-bold mb-4">Cybersecurity Resources</h1>
+                    <p class="lead fs-4 mb-5">Start with this essential video tutorial</p>
+                    <button class="btn btn-primary btn-lg play-video-btn" id="playBtn">
+                        <i class="fas fa-play me-2"></i>Play Video Tutorial
+                    </button>
+                </div>
+                <div class="video-container position-relative">
+                    <video class="img-fluid w-100 rounded shadow-lg" id="resourceVideo" controls preload="metadata" poster="">
+                        <source src="{% static 'myapp/video/What_is_Cyber_Security_How_You_Can_Protect_Yourself_from_Cyber_Attacks_1080P.mp4' %}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-overlay d-flex align-items-center justify-content-center" id="videoOverlay">
+                        <button class="btn btn-light btn-lg rounded-circle play-overlay-btn" id="playOverlayBtn">
+                            <i class="fas fa-play fa-2x"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="hero-section bg-dark text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-4">Cybersecurity Resources</h1>
+                <p class="lead mb-4">Understanding Cybersecurity Threats<br>Learn about the most common cyber threats and how to protect yourself.</p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="#threats" class="btn btn-primary btn-lg">Start Learning <i class="fas fa-arrow-down ms-2"></i></a>
+                    <a href="{% url 'quiz_history' %}" class="btn btn-success btn-lg">View Quiz History <i class="fas fa-history ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="threats" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Common Cyber Threats</h2>
+        
+        <div class="row g-4">
+            <!-- Phishing Attacks -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm threat-card">
+                    <div class="card-body">
+                        <div class="threat-header mb-3">
+                            <h3 class="text-danger"><i class="fas fa-fish me-2"></i>Phishing Attacks</h3>
+                        </div>
+                        <p class="card-text">Phishing is a type of social engineering attack where attackers try to trick you into revealing sensitive information by pretending to be a trustworthy entity.</p>
+                        <h6 class="text-warning mt-3 mb-2"><i class="fas fa-exclamation-triangle me-1"></i>Warning Signs:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Urgent or threatening language</li>
+                            <li>• Suspicious sender email addresses</li>
+                            <li>• Links that don't match the displayed text</li>
+                            <li>• Requests for personal information</li>
+                            <li>• Grammar and spelling errors</li>
+                        </ul>
+                        <h6 class="text-success mt-3 mb-2"><i class="fas fa-shield-alt me-1"></i>Protection Tips:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Verify sender identity before clicking</li>
+                            <li>• Don't provide sensitive info via email</li>
+                            <li>• Use our URL and Email scanners</li>
+                            <li>• When in doubt, contact the organization directly</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Malware -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm threat-card">
+                    <div class="card-body">
+                        <div class="threat-header mb-3">
+                            <h3 class="text-danger"><i class="fas fa-bug me-2"></i>Malware</h3>
+                        </div>
+                        <p class="card-text">Malware is malicious software designed to damage, disrupt, or gain unauthorized access to computer systems.</p>
+                        <h6 class="text-warning mt-3 mb-2"><i class="fas fa-list me-1"></i>Types of Malware:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Viruses: Self-replicating programs that attach to clean files</li>
+                            <li>• Trojans: Disguised as legitimate software</li>
+                            <li>• Worms: Spread across networks without user action</li>
+                            <li>• Spyware: Secretly monitors user activity</li>
+                            <li>• Adware: Displays unwanted advertisements</li>
+                        </ul>
+                        <h6 class="text-success mt-3 mb-2"><i class="fas fa-shield-alt me-1"></i>Protection Tips:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Keep software updated</li>
+                            <li>• Use reputable antivirus software</li>
+                            <li>• Only download from trusted sources</li>
+                            <li>• Scan files before opening them</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ransomware -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm threat-card">
+                    <div class="card-body">
+                        <div class="threat-header mb-3">
+                            <h3 class="text-danger"><i class="fas fa-lock me-2"></i>Ransomware</h3>
+                        </div>
+                        <p class="card-text">Ransomware encrypts your files and demands payment for the decryption key, rendering your data inaccessible.</p>
+                        <h6 class="text-warning mt-3 mb-2"><i class="fas fa-share me-1"></i>How It Spreads:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Phishing emails with malicious attachments</li>
+                            <li>• Compromised websites</li>
+                            <li>• Exploited software vulnerabilities</li>
+                            <li>• Remote Desktop Protocol (RDP) attacks</li>
+                        </ul>
+                        <h6 class="text-success mt-3 mb-2"><i class="fas fa-shield-alt me-1"></i>Protection Tips:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Regularly backup your data</li>
+                            <li>• Keep systems and software updated</li>
+                            <li>• Use strong, unique passwords</li>
+                            <li>• Be cautious with email attachments</li>
+                            <li>• Use network segmentation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Engineering -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm threat-card">
+                    <div class="card-body">
+                        <div class="threat-header mb-3">
+                            <h3 class="text-danger"><i class="fas fa-users me-2"></i>Social Engineering</h3>
+                        </div>
+                        <p class="card-text">Social engineering attacks exploit human psychology rather than technical vulnerabilities to gain access to systems or information.</p>
+                        <h6 class="text-warning mt-3 mb-2"><i class="fas fa-list me-1"></i>Common Techniques:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Pretexting: Creating a fabricated scenario</li>
+                            <li>• Baiting: Offering something enticing</li>
+                            <li>• Tailgating: Following authorized personnel</li>
+                            <li>• Quid Pro Quo: Offering a service for information</li>
+                        </ul>
+                        <h6 class="text-success mt-3 mb-2"><i class="fas fa-shield-alt me-1"></i>Protection Tips:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Verify identities independently</li>
+                            <li>• Don't let urgency override caution</li>
+                            <li>• Question unsolicited contacts</li>
+                            <li>• Report suspicious requests</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MitM -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm threat-card">
+                    <div class="card-body">
+                        <div class="threat-header mb-3">
+                            <h3 class="text-danger"><i class="fas fa-exchange-alt me-2"></i>Man-in-the-Middle (MitM)</h3>
+                        </div>
+                        <p class="card-text">MitM attacks intercept communications between two parties to eavesdrop or manipulate the conversation.</p>
+                        <h6 class="text-warning mt-3 mb-2"><i class="fas fa-list me-1"></i>Attack Methods:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Wi-Fi eavesdropping</li>
+                            <li>• DNS spoofing</li>
+                            <li>• Session hijacking</li>
+                            <li>• SSL stripping</li>
+                        </ul>
+                        <h6 class="text-success mt-3 mb-2"><i class="fas fa-shield-alt me-1"></i>Protection Tips:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Use HTTPS connections</li>
+                            <li>• Avoid public Wi-Fi for sensitive activities</li>
+                            <li>• Use a VPN on public networks</li>
+                            <li>• Verify website certificates</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DDoS -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm threat-card">
+                    <div class="card-body">
+                        <div class="threat-header mb-3">
+                            <h3 class="text-danger"><i class="fas fa-bomb me-2"></i>DDoS Attacks</h3>
+                        </div>
+                        <p class="card-text">Distributed Denial of Service attacks overwhelm target systems with traffic, making them unavailable to legitimate users.</p>
+                        <h6 class="text-warning mt-3 mb-2"><i class="fas fa-list me-1"></i>Types of DDoS:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Volume-based: Massive traffic flooding</li>
+                            <li>• Protocol-based: Exploiting server resources</li>
+                            <li>• Application-layer: Targeting specific applications</li>
+                        </ul>
+                        <h6 class="text-success mt-3 mb-2"><i class="fas fa-shield-alt me-1"></i>Protection Tips:</h6>
+                        <ul class="list-unstyled">
+                            <li>• Use CDN services</li>
+                            <li>• Implement rate limiting</li>
+                            <li>• Deploy DDoS protection services</li>
+                            <li>• Have an incident response plan</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Prevention Techniques</h2>
+        <div class="row g-4">
+            <!-- Email Security -->
+            <div class="col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary mb-3"><i class="fas fa-envelope me-2"></i>Email Security</h5>
+                        <ul class="list-unstyled">
+                            <li>• Verify senders: Check email addresses carefully for subtle misspellings</li>
+                            <li>• Avoid clicking: Don't click on links in suspicious emails</li>
+                            <li>• Download carefully: Never open unexpected attachments</li>
+                            <li>• Use our scanner: Scan suspicious emails with CyberPhishGuard</li>
+                            <li>• Report phishing: Report suspicious emails to your IT department</li>
+                            <li>• Check headers: Examine email headers for authenticity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- URL Safety -->
+            <div class="col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary mb-3"><i class="fas fa-link me-2"></i>URL Safety</h5>
+                        <ul class="list-unstyled">
+                            <li>• Inspect URLs: Hover over links to see the actual destination</li>
+                            <li>• Look for HTTPS: Ensure websites use secure connections</li>
+                            <li>• Check domain: Verify the domain is legitimate</li>
+                            <li>• Use URL scanner: Scan unknown URLs before visiting</li>
+                            <li>• Avoid short links: Be cautious with shortened URLs</li>
+                            <li>• Type URLs: When possible, type URLs directly into browser</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Security -->
+            <div class="col-lg-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary mb-3"><i class="fas fa-key me-2"></i>Password Security</h5>
+                        <ul class="list-unstyled">
+                            <li>• Use strong passwords: At least 12 characters with mixed types</li>
+                            <li>• Unique passwords: Use different passwords for each account</li>
+                            <li>• Password manager: Use a reputable password manager</li>
+                            <li>• Enable 2FA: Add two-factor authentication when available</li>
+                            <li>• Never share: Don't share passwords via email or messages</li>
+                            <li>• Regular updates: Change passwords periodically</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2FA -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary mb-3"><i class="fas fa-shield-alt me-2"></i>Two-Factor Authentication (2FA)</h5>
+                        <ul class="list-unstyled">
+                            <li>• Enable 2FA: Turn on 2FA for all important accounts</li>
+                            <li>• Authenticator apps: Use apps like Google Authenticator instead of SMS</li>
+                            <li>• Backup codes: Store backup codes securely</li>
+                            <li>• Hardware keys: Consider hardware security keys for critical accounts</li>
+                            <li>• Review devices: Regularly check and remove trusted devices</li>
+                            <li>• Recovery options: Set up secure recovery options</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Security Best Practices -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Security Best Practices</h2>
+        <p class="text-center mb-5 lead">Follow these best practices to maintain strong cybersecurity.</p>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="best-practice-card text-center h-100">
+                    <div class="practice-icon mb-3">
+                        <i class="fas fa-sync-alt fa-3x text-primary"></i>
+                    </div>
+                    <h4>Keep Software Updated</h4>
+                    <p>Regularly update operating systems, applications, and firmware to patch security vulnerabilities.</p>
+                    <ul class="list-unstyled text-start">
+                        <li>• Enable automatic updates when possible</li>
+                        <li>• Update browsers and plugins</li>
+                        <li>• Keep firmware up to date</li>
+                        <li>• Remove unused software</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="best-practice-card text-center h-100">
+                    <div class="practice-icon mb-3">
+                        <i class="fas fa-database fa-3x text-primary"></i>
+                    </div>
+                    <h4>Regular Backups</h4>
+                    <p>Maintain regular backups of important data to protect against data loss from attacks or hardware failures.</p>
+                    <ul class="list-unstyled text-start">
+                        <li>• Follow the 3-2-1 backup rule</li>
+                        <li>• Test backup restoration regularly</li>
+                        <li>• Store backups offline</li>
+                        <li>• Encrypt sensitive backups</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="best-practice-card text-center h-100">
+                    <div class="practice-icon mb-3">
+                        <i class="fas fa-wifi fa-3x text-primary"></i>
+                    </div>
+                    <h4>Network Security</h4>
+                    <p>Secure your network infrastructure to prevent unauthorized access and data breaches.</p>
+                    <ul class="list-unstyled text-start">
+                        <li>• Use strong Wi-Fi encryption (WPA3)</li>
+                        <li>• Change default router passwords</li>
+                        <li>• Use a firewall</li>
+                        <li>• Segment your network</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="best-practice-card text-center h-100">
+                    <div class="practice-icon mb-3">
+                        <i class="fas fa-graduation-cap fa-3x text-primary"></i>
+                    </div>
+                    <h4>Security Awareness Training</h4>
+                    <p>Educate yourself and your team about cybersecurity threats and how to recognize them.</p>
+                    <ul class="list-unstyled text-start">
+                        <li>• Complete regular security training</li>
+                        <li>• Learn to recognize phishing attempts</li>
+                        <li>• Understand social engineering tactics</li>
+                        <li>• Stay informed about new threats</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="best-practice-card text-center h-100">
+                    <div class="practice-icon mb-3">
+                        <i class="fas fa-exclamation-triangle fa-3x text-primary"></i>
+                    </div>
+                    <h4>Incident Response Plan</h4>
+                    <p>Have a plan in place to respond quickly and effectively to security incidents.</p>
+                    <ul class="list-unstyled text-start">
+                        <li>• Document response procedures</li>
+                        <li>• Know who to contact</li>
+                        <li>• Practice incident scenarios</li>
+                        <li>• Learn from past incidents</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="best-practice-card text-center h-100">
+                    <div class="practice-icon mb-3">
+                        <i class="fas fa-tools fa-3x text-primary"></i>
+                    </div>
+                    <h4>Use Security Tools</h4>
+                    <p>Leverage available security tools to enhance your protection against threats.</p>
+                    <ul class="list-unstyled text-start">
+                        <li>• Use antivirus software</li>
+                        <li>• Enable firewalls</li>
+                        <li>• Use our threat scanners</li>
+                        <li>• Consider a VPN</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Security Checklist -->
+<section class="quick-reference py-5 bg-dark text-white">
+    <div class="container">
+        <h2 class="text-center mb-5">Quick Security Checklist</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-check checklist-item">
+                            <input class="form-check-input" type="checkbox" id="check1">
+                            <label class="form-check-label" for="check1">
+                                <i class="fas fa-check-circle text-success me-2"></i>Verify email senders before clicking links
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check checklist-item">
+                            <input class="form-check-input" type="checkbox" id="check2">
+                            <label class="form-check-label" for="check2">
+                                <i class="fas fa-check-circle text-success me-2"></i>Scan suspicious URLs before visiting
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check checklist-item">
+                            <input class="form-check-input" type="checkbox" id="check3">
+                            <label class="form-check-label" for="check3">
+                                <i class="fas fa-check-circle text-success me-2"></i>Use strong, unique passwords
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check checklist-item">
+                            <input class="form-check-input" type="checkbox" id="check4">
+                            <label class="form-check-label" for="check4">
+                                <i class="fas fa-check-circle text-success me-2"></i>Enable two-factor authentication
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check checklist-item">
+                            <input class="form-check-input" type="checkbox" id="check5">
+                            <label class="form-check-label" for="check5">
+                                <i class="fas fa-check-circle text-success me-2"></i>Keep software updated
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check checklist-item">
+                            <input class="form-check-input" type="checkbox" id="check6">
+                            <label class="form-check-label" for="check6">
+                                <i class="fas fa-check-circle text-success me-2"></i>Regularly backup important data
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-check checklist-item">
+                            <input class="form-check-input" type="checkbox" id="check7">
+                            <label class="form-check-label" for="check7">
+                                <i class="fas fa-check-circle text-success me-2"></i>Stay informed about new threats
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.video-hero {
+    padding: 4rem 0;
+}
+.video-container {
+    position: relative;
+}
+#videoOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    border-radius: inherit;
+}
+#videoOverlay.hidden {
+    display: none !important;
+}
+.play-overlay-btn {
+    width: 100px;
+    height: 100px;
+    font-size: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+.play-overlay-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+}
+.play-video-btn {
+    font-size: 1.25rem;
+    padding: 1rem 2rem;
+}
+.threat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.threat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+}
+.best-practice-card .practice-icon i {
+    background: linear-gradient(45deg, #0d6efd, #6610f2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.checklist-item {
+    padding: 1rem;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+}
+.checklist-item:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateX(10px);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const video = document.getElementById('resourceVideo');
+    const overlay = document.getElementById('videoOverlay');
+    const playBtn = document.getElementById('playBtn');
+    const playOverlayBtn = document.getElementById('playOverlayBtn');
+
+    // Hide native controls initially and show overlay
+    video.controls = false;
+    
+    playBtn.addEventListener('click', function() {
+        video.play();
+        overlay.classList.add('hidden');
+        video.controls = true;
+    });
+
+    playOverlayBtn.addEventListener('click', function() {
+        video.play();
+        overlay.classList.add('hidden');
+        video.controls = true;
+    });
+
+    video.addEventListener('ended', function() {
+        overlay.classList.remove('hidden');
+        video.controls = false;
+    });
+});
+</script>
+
+{% endblock %}

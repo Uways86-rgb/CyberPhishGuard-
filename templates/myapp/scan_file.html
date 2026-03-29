@@ -1,0 +1,287 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block title %}File Scanner - CyberSecurity Threat Detection{% endblock %}
+
+{% block content %}
+<div class="scan-container">
+    <div class="container">
+        <div class="scan-header">
+            <h1><i class="fas fa-search"></i> File Security Scanner</h1>
+            <p>Upload files for comprehensive threat analysis and security assessment.</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="scan-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-upload"></i> File Upload</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="scanForm" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="upload-area" id="uploadArea">
+                                <div class="upload-content">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <h4>Drag & Drop Files Here</h4>
+                                    <p>or <span class="upload-link">browse files</span></p>
+                                    <input type="file" id="fileInput" name="file" accept="*" style="display: none;">
+                                </div>
+                            </div>
+
+                            <div class="file-info" id="fileInfo" style="display: none;">
+                                <div class="file-details">
+                                    <i class="fas fa-file"></i>
+                                    <span id="fileName"></span>
+                                    <span id="fileSize"></span>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger" id="removeFile">
+                                    <i class="fas fa-times"></i> Remove
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Scan Options -->
+                <div class="scan-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-cogs"></i> Scan Options</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="scan-options">
+                            <div class="option-item">
+                                <input type="checkbox" id="signatureScan" checked>
+                                <label for="signatureScan">
+                                    <div class="option-content">
+                                        <h5>Signature Scan</h5>
+                                        <p>Check against known malware signatures and patterns</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="behavioralScan" checked>
+                                <label for="behavioralScan">
+                                    <div class="option-content">
+                                        <h5>Behavioral Analysis</h5>
+                                        <p>Analyze file behavior and potential malicious actions</p>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="option-item">
+                                <input type="checkbox" id="sandboxScan">
+                                <label for="sandboxScan">
+                                    <div class="option-content">
+                                        <h5>Sandbox Execution</h5>
+                                        <p>Execute file in isolated environment (slower but thorough)</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Scan Actions -->
+                <div class="scan-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-play"></i> Scan Actions</h3>
+                    </div>
+                    <div class="card-body">
+                        <button type="button" class="btn btn-primary btn-block" id="startScan" disabled>
+                            <i class="fas fa-play"></i> Start Scan
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-block" id="cancelScan">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scan History -->
+                <div class="scan-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-history"></i> Recent Scans</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="scan-history">
+                            <div class="history-item">
+                                <div class="history-icon safe">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="history-content">
+                                    <h6>document.pdf</h6>
+                                    <small>Safe - 2 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-icon warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="history-content">
+                                    <h6>setup.exe</h6>
+                                    <small>Suspicious - 15 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-icon safe">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="history-content">
+                                    <h6>image.jpg</h6>
+                                    <small>Safe - 1 hour ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scan Results Modal -->
+        <div class="modal fade" id="scanResultsModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-chart-bar"></i> Scan Results</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="scanResults">
+                        <!-- Results will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+    const removeFile = document.getElementById('removeFile');
+    const startScan = document.getElementById('startScan');
+    const scanForm = document.getElementById('scanForm');
+
+    // Drag and drop functionality
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('drag-over');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileSelect(files[0]);
+        }
+    });
+
+    uploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+
+    removeFile.addEventListener('click', () => {
+        fileInput.value = '';
+        fileInfo.style.display = 'none';
+        uploadArea.style.display = 'block';
+        startScan.disabled = true;
+    });
+
+    function handleFileSelect(file) {
+        fileName.textContent = file.name;
+        fileSize.textContent = `(${formatFileSize(file.size)})`;
+        fileInfo.style.display = 'flex';
+        uploadArea.style.display = 'none';
+        startScan.disabled = false;
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    startScan.addEventListener('click', () => {
+        const formData = new FormData(scanForm);
+
+        // Show loading state
+        startScan.disabled = true;
+        startScan.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning...';
+
+        fetch('/scan/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            displayScanResults(data);
+            $('#scanResultsModal').modal('show');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred during scanning.');
+        })
+        .finally(() => {
+            startScan.disabled = false;
+            startScan.innerHTML = '<i class="fas fa-play"></i> Start Scan';
+        });
+    });
+
+    function displayScanResults(data) {
+        const resultsDiv = document.getElementById('scanResults');
+        resultsDiv.innerHTML = `
+            <div class="scan-result-header">
+                <h4>File: ${data.file_name}</h4>
+                <div class="threat-level ${data.threat_level.toLowerCase()}">
+                    <i class="fas fa-shield-alt"></i> ${data.threat_level}
+                </div>
+            </div>
+            <div class="scan-details">
+                <div class="detail-item">
+                    <strong>File Size:</strong> ${formatFileSize(data.file_size)}
+                </div>
+                <div class="detail-item">
+                    <strong>Hash:</strong> ${data.file_hash}
+                </div>
+                <div class="detail-item">
+                    <strong>Confidence:</strong> ${data.confidence}%
+                </div>
+                <div class="detail-item">
+                    <strong>Scan Time:</strong> ${data.scan_time}
+                </div>
+            </div>
+            <div class="detections">
+                <h5>Detection Results:</h5>
+                ${data.detections.map(detection => `
+                    <div class="detection-item ${detection.result}">
+                        <div class="detection-type">${detection.type}</div>
+                        <div class="detection-result">${detection.result}</div>
+                        <div class="detection-message">${detection.message}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+});
+</script>
+{% endblock %}
