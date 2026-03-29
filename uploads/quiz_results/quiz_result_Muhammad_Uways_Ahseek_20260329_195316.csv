@@ -1,0 +1,60 @@
+CyberPhishGuard Quiz Results
+""
+User:,Muhammad_Uways_Ahseek
+Date:,2026-03-29 19:53:16
+Score:,2/10
+Percentage:,20.0%
+""
+Question Number,Question,Your Answer,Correct Answer,Status
+""
+1,What is phishing?,a,A fake attempt to steal personal data,WRONG
+2,Which password is the strongest?,a,P@ssW0rd#9,WRONG
+3,What should you do with suspicious email links?,a,Ignore or report,WRONG
+4,What does HTTPS stand for?,a,Hyper Text Transfer Protocol Secure,CORRECT
+5,What is two-factor authentication (2FA)?,a,A security method requiring two forms of verification,WRONG
+6,Which of these is a sign of a phishing email?,c,Urgent requests for personal information,WRONG
+7,What should you do before downloading software?,c,Verify the source and scan for viruses,WRONG
+8,What is malware?,a,Malicious software designed to harm your system,WRONG
+9,How often should you update your passwords?,a,Every few months or immediately if compromised,WRONG
+10,What is a VPN used for?,b,"To create a secure, encrypted connection",CORRECT
+""
+Wrong Answers Details:
+""
+Question:,What is phishing?
+Your Answer:,a
+Correct Answer:,A fake attempt to steal personal data
+""
+Question:,Which password is the strongest?
+Your Answer:,a
+Correct Answer:,P@ssW0rd#9
+""
+Question:,What should you do with suspicious email links?
+Your Answer:,a
+Correct Answer:,Ignore or report
+""
+Question:,What is two-factor authentication (2FA)?
+Your Answer:,a
+Correct Answer:,A security method requiring two forms of verification
+""
+Question:,Which of these is a sign of a phishing email?
+Your Answer:,c
+Correct Answer:,Urgent requests for personal information
+""
+Question:,What should you do before downloading software?
+Your Answer:,c
+Correct Answer:,Verify the source and scan for viruses
+""
+Question:,What is malware?
+Your Answer:,a
+Correct Answer:,Malicious software designed to harm your system
+""
+Question:,How often should you update your passwords?
+Your Answer:,a
+Correct Answer:,Every few months or immediately if compromised
+""
+Summary:
+Total Questions:,10
+Correct Answers:,2
+Wrong Answers:,8
+Percentage:,20.0%
+Achievement:,Keep Learning!
