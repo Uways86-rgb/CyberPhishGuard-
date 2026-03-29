@@ -375,7 +375,7 @@ class AdvancedThreatDetector:
             suspicious_paths = ['/login', '/signin', '/account', '/verify', '/secure', '/update']
             for sp in suspicious_paths:
                 if sp in path.lower():
-                    score += 10
+                    score += 5
                     alerts.append(f"Suspicious path detected: {sp}")
             
             # Check for encoded characters
@@ -565,7 +565,7 @@ class AdvancedThreatDetector:
         login_indicators = ['<form', 'password', 'login', 'signin', 'username']
         login_count = sum(1 for indicator in login_indicators if indicator in content.lower())
         if login_count >= 3:
-            score += 20
+            score += 10
             alerts.append("Page contains login/sign-in form - verify legitimacy")
         
         # Check for credit card forms
@@ -582,7 +582,7 @@ class AdvancedThreatDetector:
         suspicious_js = ['eval(', 'document.write(', 'innerHTML', 'location.href']
         for js in suspicious_js:
             if js in content.lower():
-                score += 15
+                score += 10
                 alerts.append(f"Suspicious JavaScript detected: {js}")
         
         # Check for iframe injection
@@ -592,13 +592,13 @@ class AdvancedThreatDetector:
         
         # Check for hidden elements
         if 'display:none' in content.lower() or 'visibility:hidden' in content.lower():
-            score += 15
+            score += 10
             alerts.append("Page contains hidden elements")
         
-        # Check for external links (legitimate sites usually have few)
+        # Check for external links (legitimate sites usually have many links)
         external_links = re.findall(r'href=["\'](http[^"\']+)["\']', content)
-        if len(external_links) > 20:
-            score += 10
+        if len(external_links) > 40:
+            score += 5
             alerts.append(f"Page has {len(external_links)} external links")
         
         return score, alerts

@@ -437,17 +437,30 @@ def scan_edit(request, scan_id):
 
 @login_required
 def scan_delete(request, scan_id):
-    if not request.user.is_staff:
-        messages.error(request, 'You do not have permission to delete scans.')
+    scan_obj = get_object_or_404(ScanLog, pk=scan_id)
+    if not (request.user.is_staff or scan_obj.user == request.user):
+        messages.error(request, 'You do not have permission to delete this scan.')
         return redirect('dashboard')
 
-    scan_obj = get_object_or_404(ScanLog, pk=scan_id)
     if request.method == 'POST':
         scan_obj.delete()
         messages.success(request, 'Scan record deleted successfully.')
         return redirect('scan_management')
 
     return render(request, 'myapp/scan_confirm_delete.html', {'scan_obj': scan_obj})
+
+@login_required
+def clear_scan_history(request):
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to clear scan history.')
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        ScanLog.objects.all().delete()
+        messages.success(request, 'All scan history has been deleted.')
+        return redirect('scan_management')
+
+    return redirect('scan_management')
 
 @login_required
 def all_threats(request):
@@ -457,6 +470,33 @@ def all_threats(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'myapp/all_threats.html', {'threats': page_obj, 'page_obj': page_obj})
+
+@login_required
+def threat_delete(request, threat_id):
+    threat_obj = get_object_or_404(ThreatLog, pk=threat_id)
+    if not (request.user.is_staff or threat_obj.reported_by == request.user):
+        messages.error(request, 'You do not have permission to delete this threat.')
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        threat_obj.delete()
+        messages.success(request, 'Threat record deleted successfully.')
+        return redirect('all_threats')
+
+    return render(request, 'myapp/threat_confirm_delete.html', {'threat_obj': threat_obj})
+
+@login_required
+def clear_threat_history(request):
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to clear threat history.')
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        ThreatLog.objects.all().delete()
+        messages.success(request, 'All threat history has been deleted.')
+        return redirect('all_threats')
+
+    return redirect('all_threats')
 
 @login_required
 def scan_breakdown(request):

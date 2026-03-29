@@ -598,6 +598,52 @@ body {
     transform: none;
 }
 
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-sm {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.85rem;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: #ffffff;
+    border: 1px solid #bd2130;
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+    background: #c82333;
+    border-color: #b21f2d;
+    color: #ffffff;
+}
+
+.btn-outline-danger {
+    color: #ff6b6b;
+    border-color: rgba(255, 107, 107, 0.9);
+}
+
+.btn-outline-danger:hover,
+.btn-outline-danger:focus {
+    background: rgba(255, 107, 107, 0.15);
+    color: #ffffff;
+    border-color: #ff6b6b;
+}
+
+.btn-outline-secondary {
+    color: #ced4da;
+    border-color: rgba(206, 212, 218, 0.8);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+    background: rgba(206, 212, 218, 0.1);
+    color: #ffffff;
+}
+
 /* Scan File Styles */
 .scan-container {
     padding: 80px 0;

@@ -4,10 +4,18 @@
 {% block content %}
 <div class="dashboard-container py-4">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-start flex-column flex-md-row mb-4 gap-3">
             <div>
                 <h1><i class="fas fa-server"></i> Scan Management</h1>
                 <p class="text-muted">View, edit, and remove recorded scan entries.</p>
+            </div>
+            <div class="btn-toolbar">
+                <form method="post" action="{% url 'clear_scan_history' %}" onsubmit="return confirm('Delete all scan records? This cannot be undone.');" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i> Clear All Scan History
+                    </button>
+                </form>
             </div>
         </div>
 
@@ -37,7 +45,13 @@
                                 <span class="badge bg-success">Clean</span>
                             {% endif %}
                         </td>
-                        <td>{{ scan.user.username if scan.user else 'Anonymous' }}</td>
+                        <td>
+                            {% if scan.user %}
+                                {{ scan.user.username }}
+                            {% else %}
+                                Anonymous
+                            {% endif %}
+                        </td>
                         <td>{{ scan.scan_time|date:'Y-m-d H:i' }}</td>
                         <td class="text-end">
                             <a href="{% url 'scan_edit' scan.id %}" class="btn btn-sm btn-outline-primary me-1">
@@ -45,8 +59,8 @@
                             </a>
                             <form action="{% url 'scan_delete' scan.id %}" method="post" class="d-inline">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this scan record?');">
-                                    <i class="fas fa-trash"></i>
+                                <button type="submit" class="btn btn-danger btn-sm text-white" onclick="return confirm('Delete this scan record?');">
+                                    <i class="fas fa-trash"></i> Delete
                                 </button>
                             </form>
                         </td>

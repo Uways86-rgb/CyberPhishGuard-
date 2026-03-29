@@ -1,0 +1,26 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Delete Threat - CyberSecurity Threat Detection{% endblock %}
+
+{% block content %}
+<div class="dashboard-container py-4">
+    <div class="container">
+        <div class="card shadow-sm">
+            <div class="card-header bg-danger text-white">
+                <h2 class="mb-0">Delete Threat</h2>
+            </div>
+            <div class="card-body">
+                <p>Are you sure you want to permanently delete this threat record?</p>
+                <p><strong>Type:</strong> {{ threat_obj.threat_type|title }}</p>
+                <p><strong>Severity:</strong> {{ threat_obj.severity|title }}</p>
+                <p><strong>Status:</strong> {{ threat_obj.status|title }}</p>
+                <p><strong>Description:</strong> {{ threat_obj.description|truncatechars:120 }}</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <a href="{% url 'all_threats' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-danger">Delete Threat</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

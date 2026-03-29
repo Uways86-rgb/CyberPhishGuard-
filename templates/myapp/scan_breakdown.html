@@ -75,6 +75,7 @@
                                         <th>Target</th>
                                         <th>Result</th>
                                         <th>Time</th>
+                                        <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -89,10 +90,18 @@
                                             {% endif %}
                                         </td>
                                         <td>{{ scan.scan_time|date:"H:i" }}</td>
+                                        <td class="text-end">
+                                            {% if request.user.is_staff or scan.user == request.user %}
+                                            <form method="post" action="{% url 'scan_delete' scan.id %}" class="d-inline" onsubmit="return confirm('Delete this scan record?');">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-danger text-white">Delete</button>
+                                            </form>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                     {% empty %}
                                     <tr>
-                                        <td colspan="3" class="text-center text-muted py-4">No URL scans</td>
+                                        <td colspan="4" class="text-center text-muted py-4">No URL scans</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -116,6 +125,7 @@
                                         <th>Subject</th>
                                         <th>Result</th>
                                         <th>Time</th>
+                                        <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -130,10 +140,18 @@
                                             {% endif %}
                                         </td>
                                         <td>{{ scan.scan_time|date:"H:i" }}</td>
+                                        <td class="text-end">
+                                            {% if request.user.is_staff or scan.user == request.user %}
+                                            <form method="post" action="{% url 'scan_delete' scan.id %}" class="d-inline" onsubmit="return confirm('Delete this scan record?');">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-danger text-white">Delete</button>
+                                            </form>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                     {% empty %}
                                     <tr>
-                                        <td colspan="3" class="text-center text-muted py-4">No email scans</td>
+                                        <td colspan="4" class="text-center text-muted py-4">No email scans</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -157,6 +175,7 @@
                                         <th>File</th>
                                         <th>Result</th>
                                         <th>Time</th>
+                                        <th class="text-end">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -171,10 +190,18 @@
                                             {% endif %}
                                         </td>
                                         <td>{{ scan.scan_time|date:"H:i" }}</td>
+                                        <td class="text-end">
+                                            {% if request.user.is_staff or scan.user == request.user %}
+                                            <form method="post" action="{% url 'scan_delete' scan.id %}" class="d-inline" onsubmit="return confirm('Delete this scan record?');">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-danger text-white">Delete</button>
+                                            </form>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                     {% empty %}
                                     <tr>
-                                        <td colspan="3" class="text-center text-muted py-4">No malware scans</td>
+                                        <td colspan="4" class="text-center text-muted py-4">No malware scans</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
